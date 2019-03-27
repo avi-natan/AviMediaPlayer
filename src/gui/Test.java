@@ -9,7 +9,7 @@ public class Test {
 	public static void main(String[] args) {
 
 		Scanner s = new Scanner(System.in);
-		Manager manager = new Manager();
+		Manager manager = Manager.getInstance();
 
 		int menuChoice = -1;
 		while(menuChoice != 0) {

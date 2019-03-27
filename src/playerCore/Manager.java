@@ -9,11 +9,20 @@ public class Manager {
 	
 	private List<Song> playlist;
 	private Song currentSong;
-
-	public Manager() {
+	
+	
+	private static class Loader {
+		static final Manager INSTANCE = new Manager();
+	}
+	
+	private Manager() {
 		this.nextFreeId = 1; 
 		this.playlist = new ArrayList<Song>();
 		this.currentSong = null;
+	}
+
+	public static Manager getInstance() {
+		return Loader.INSTANCE;
 	}
 	
 	
