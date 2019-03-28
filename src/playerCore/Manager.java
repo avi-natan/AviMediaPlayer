@@ -3,12 +3,15 @@ package playerCore;
 import java.util.ArrayList;
 import java.util.List;
 
+import mediaFiles.MediaFile;
+import mediaFiles.MP3File;
+
 public class Manager {
 	
 	private int nextFreeId;
 	
-	private List<Song> playlist;
-	private Song currentSong;
+	private List<MediaFile> playlist;
+	private MediaFile currentMediaFile;
 	
 	
 	private static class Loader {
@@ -17,8 +20,8 @@ public class Manager {
 	
 	private Manager() {
 		this.nextFreeId = 1; 
-		this.playlist = new ArrayList<Song>();
-		this.currentSong = null;
+		this.playlist = new ArrayList<MediaFile>();
+		this.currentMediaFile = null;
 	}
 
 	public static Manager getInstance() {
@@ -26,41 +29,41 @@ public class Manager {
 	}
 	
 	
-	public void addSong(String filename) {
-		Song song = new Song(filename, nextFreeId);
-		System.out.println("Adding song " + song.getName() + ", song number is " + song.getSongId() + "\n");
-		playlist.add(song);
+	public void addMediaFile(String filename) {
+		MediaFile file = new MP3File(filename, nextFreeId);
+		System.out.println("Adding file " + file.getName() + ", file number is " + file.getId() + "\n");
+		playlist.add(file);
 		nextFreeId++;
 		
 		if(playlist.size() == 1) {
-			currentSong = playlist.get(0);
+			currentMediaFile = playlist.get(0);
 		}
 	}
 	
-	public void removeSong(int index) {
-		System.out.println("Removing song " + playlist.get(index).getName());
+	public void removeMediaFile(int index) {
+		System.out.println("Removing file " + playlist.get(index).getName());
 		playlist.remove(index);
 	}
 	
 	
 	public void play() {
-		currentSong.play();
+		currentMediaFile.play();
 	}
 	
 	public void pause() {
-		currentSong.pause();
+		currentMediaFile.pause();
 	}
 	
 	public void stop() {
-		currentSong.stop();
+		currentMediaFile.stop();
 	}
 	
 	
-	public void displayCurrentSong() {
-		System.out.println("Current song: " + currentSong.getName());
+	public void displayCurrentMediaFile() {
+		System.out.println("Current media file: " + currentMediaFile.getName());
 	}
 	
-	public void listSongs() {
+	public void listMediaFiles() {
 		for(int i = 0; i < playlist.size(); i++) {
 			System.out.println("[" + i + "] " + playlist.get(i).getName());
 		}
@@ -68,17 +71,17 @@ public class Manager {
 	
 	
 	public void next() {
-		System.out.println("Changing to next song...");
-		int i = playlist.indexOf(currentSong);
-		currentSong = i < playlist.size() - 1 ? playlist.get(i + 1) : playlist.get(0);
-		System.out.println("New song is " + currentSong.getName());
+		System.out.println("Changing to next file...");
+		int i = playlist.indexOf(currentMediaFile);
+		currentMediaFile = i < playlist.size() - 1 ? playlist.get(i + 1) : playlist.get(0);
+		System.out.println("New file is " + currentMediaFile.getName());
 	}
 	
 	public void previous() {
-		System.out.println("Changing to previous song...");
-		int i = playlist.indexOf(currentSong);
-		currentSong = i > 0 ? playlist.get(i - 1) : playlist.get(playlist.size() - 1);
-		System.out.println("New song is " + currentSong.getName());
+		System.out.println("Changing to previous file...");
+		int i = playlist.indexOf(currentMediaFile);
+		currentMediaFile = i > 0 ? playlist.get(i - 1) : playlist.get(playlist.size() - 1);
+		System.out.println("New file is " + currentMediaFile.getName());
 	}
 	
 	
