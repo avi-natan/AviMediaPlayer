@@ -2,18 +2,17 @@ package mediaFiles;
 
 public interface MediaFile {
 	
-	public void play();
-	public void pause();
+	public void playPause();
 	public void stop();
 	
 	public MediaFileState getState();
 	public void setState(MediaFileState state);
 	
-	public int getId();
-	public void setId(int id);
+	public String getFileName();
+	public void setFileName(String fileName);
 	
-	public String getName();
-	public void setName(String name);
+	public String getTitle();
+	public void setTitle(String title);
 	
 	public String getArtist();
 	public void setArtist(String artist);

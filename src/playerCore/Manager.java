@@ -8,8 +8,6 @@ import mediaFiles.MP3File;
 
 public class Manager {
 	
-	private int nextFreeId;
-	
 	private List<MediaFile> playlist;
 	private MediaFile currentMediaFile;
 	
@@ -19,7 +17,6 @@ public class Manager {
 	}
 	
 	private Manager() {
-		this.nextFreeId = 1; 
 		this.playlist = new ArrayList<MediaFile>();
 		this.currentMediaFile = null;
 	}
@@ -30,10 +27,9 @@ public class Manager {
 	
 	
 	public void addMediaFile(String filename) {
-		MediaFile file = new MP3File(filename, nextFreeId);
-		System.out.println("Adding file " + file.getName() + ", file number is " + file.getId() + "\n");
+		MediaFile file = new MP3File(filename);
+		System.out.println("Adding file " + file.getTitle() + ", file path is " + file.getFileName() + "\n");
 		playlist.add(file);
-		nextFreeId++;
 		
 		if(playlist.size() == 1) {
 			currentMediaFile = playlist.get(0);
@@ -41,31 +37,33 @@ public class Manager {
 	}
 	
 	public void removeMediaFile(int index) {
-		System.out.println("Removing file " + playlist.get(index).getName());
+		System.out.println("Removing file " + playlist.get(index).getTitle());
 		playlist.remove(index);
 	}
 	
-	
-	public void play() {
-		currentMediaFile.play();
+	public boolean isPlaylistEmpty() {
+		return playlist.size() == 0;
 	}
 	
-	public void pause() {
-		currentMediaFile.pause();
+	
+	public void playPause() {
+		if(currentMediaFile != null) {
+			currentMediaFile.playPause();
+		}
 	}
 	
 	public void stop() {
-		currentMediaFile.stop();
+		if(currentMediaFile != null) currentMediaFile.stop();
 	}
 	
 	
 	public void displayCurrentMediaFile() {
-		System.out.println("Current media file: " + currentMediaFile.getName());
+		System.out.println("Current media file: " + currentMediaFile.getTitle());
 	}
 	
 	public void listMediaFiles() {
 		for(int i = 0; i < playlist.size(); i++) {
-			System.out.println("[" + i + "] " + playlist.get(i).getName());
+			System.out.println("[" + i + "] " + playlist.get(i).getTitle());
 		}
 	}
 	
@@ -74,14 +72,14 @@ public class Manager {
 		System.out.println("Changing to next file...");
 		int i = playlist.indexOf(currentMediaFile);
 		currentMediaFile = i < playlist.size() - 1 ? playlist.get(i + 1) : playlist.get(0);
-		System.out.println("New file is " + currentMediaFile.getName());
+		System.out.println("New file is " + currentMediaFile.getTitle());
 	}
 	
 	public void previous() {
 		System.out.println("Changing to previous file...");
 		int i = playlist.indexOf(currentMediaFile);
 		currentMediaFile = i > 0 ? playlist.get(i - 1) : playlist.get(playlist.size() - 1);
-		System.out.println("New file is " + currentMediaFile.getName());
+		System.out.println("New file is " + currentMediaFile.getTitle());
 	}
 	
 	

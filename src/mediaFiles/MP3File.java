@@ -1,38 +1,81 @@
 package mediaFiles;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+
+import javazoom.jl.player.Player;
+
 public class MP3File implements MediaFile{
 	
-	private int id;
 	private MediaFileState state;
 	
-	private String name;
+	private String fileName;
+	private Player player;
+	private Thread playThread;
+	
+	private String title;
 	private String artist;
 	private String album;
 	private int year;	
 	
-	public MP3File(String filename, int id) {
-		this.id = id;
+	public MP3File(String fileName) {
 		this.state = MediaFileState.STOPPED;
 		
-		this.name = filename; // TODO fix when we have a parser
+		this.fileName = fileName;
+		
+		this.title = "Undefined"; // TODO fix when we have a parser
 		this.artist = "Undefined";
 		this.album = "Undefined";
 		this.year = 1991;
+		
+		
 	}
 	
-	@Override
-	public void play() {
-		System.out.println("Playing MP3 file " + id);
-	}
 	
 	@Override
-	public void pause() {
-		System.out.println("MP3 file " + id + " paused");
+	public void playPause() {
+		
+		if(state == MediaFileState.STOPPED) {
+			System.out.println("Playing MP3 file " + fileName);
+			try {
+				FileInputStream fis = new FileInputStream(fileName);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				player = new Player(bis);
+			} catch (Exception e) {
+				System.out.println("Problem playing file " + fileName);
+				System.out.println(e);
+			}
+			
+			// run in new thread to play in background
+			playThread = new Thread() {
+				public void run() {
+					try { player.play(); }
+					catch (Exception e) { System.out.println(e); }
+				}
+			};
+			playThread.start();
+			state = MediaFileState.PLAYING;
+		} else if(state == MediaFileState.PAUSED) {
+			System.out.println("Resuming MP3 file " + fileName);
+			playThread.resume();
+			state = MediaFileState.PLAYING;
+		} else if(state == MediaFileState.PLAYING) {
+			System.out.println("Pausing MP3 file " + fileName);
+			state = MediaFileState.PAUSED;
+			playThread.suspend();
+		}
+		
 	}
 	
 	@Override
 	public void stop() {
-		System.out.println("MP3 file " + id + " stopped");
+		System.out.println("Stopping MP3 file " + fileName);
+		
+		playThread.stop();
+		if(player != null) player.close();
+		
+		state = MediaFileState.STOPPED;
+		
 	}
 	
 
@@ -46,26 +89,25 @@ public class MP3File implements MediaFile{
 		this.state = state;
 	}
 	
+	@Override
+	public String getFileName() {
+		return this.fileName;
+	}
 	
 	@Override
-	public int getId() {
-		return id;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	
+	@Override
+	public String getTitle() {
+		return title;
 	}
 
 	@Override
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	
@@ -103,7 +145,8 @@ public class MP3File implements MediaFile{
 	
 	
 	public void finalize() {
-		System.out.println("finilizing MP3 file " + this.name);
+		System.out.println("finilizing MP3 file " + this.title);
 	}
+
 	
 }
