@@ -12,8 +12,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<HBox fx:id="parent" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="parent" stylesheets="@stylesheet.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="javaFxGui.UiController">
+<HBox fx:id="parent" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="parent" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFxGui.UiController">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="380.0" styleClass="player" HBox.hgrow="NEVER">
          <children>
@@ -30,9 +29,10 @@
                </font>
             </Label>
             <JFXProgressBar layoutX="2.0" layoutY="350.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="380.0" progress="0.65" />
-            <FontAwesomeIcon iconName="ARROW_LEFT" layoutX="90.0" layoutY="419.0" size="2em" styleClass="player-btns" />
-            <FontAwesomeIcon iconName="PLAY" layoutX="182.0" layoutY="419.0" size="2em" styleClass="player-btns" />
-            <FontAwesomeIcon iconName="ARROW_RIGHT" layoutX="268.0" layoutY="419.0" size="2em" styleClass="player-btns" />
+            <FontAwesomeIcon iconName="ARROW_LEFT" layoutX="90.0" layoutY="419.0" onMouseClicked="#previous_song" size="2em" styleClass="player-btns" />
+            <FontAwesomeIcon fx:id="btn_play" iconName="PLAY" layoutX="180.0" layoutY="419.0" onMouseClicked="#play_current_song" size="2em" styleClass="player-btns" />
+            <FontAwesomeIcon iconName="ARROW_RIGHT" layoutX="268.0" layoutY="419.0" onMouseClicked="#next_song" size="2em" styleClass="player-btns" />
+            <FontAwesomeIcon fx:id="btn_pause" iconName="PAUSE" layoutX="180.0" layoutY="419.0" onMouseClicked="#pause_current_song" size="2em" styleClass="player-btns" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="sidebar" layoutX="220.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="300.0" styleClass="player" HBox.hgrow="NEVER">
@@ -40,73 +40,12 @@
             <Insets left="5.0" />
          </HBox.margin>
          <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" styleClass="orange">
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="300.0" styleClass="orange">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" text="Benny Music" textFill="WHITE">
-                     <font>
-                        <Font name="Ebrima" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="14.0" layoutY="37.0" text="Beauty" textFill="WHITE">
-                     <font>
-                        <Font name="Ebrima" size="18.0" />
-                     </font>
-                  </Label>
+                  <FontAwesomeIcon iconName="PLUS" layoutX="6.0" layoutY="20.0" onMouseClicked="#open_file" size="1.5em" styleClass="menu-btn" />
+                  <FontAwesomeIcon iconName="MINUS" layoutX="31.0" layoutY="20.0" size="1.5em" styleClass="menu-btn" />
                </children>
             </Pane>
-            <Label layoutX="14.0" layoutY="108.0" text="Main" textFill="WHITE">
-               <font>
-                  <Font name="Ebrima" size="18.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER_LEFT" layoutX="54.0" layoutY="135.0">
-               <children>
-                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="100.0" text="Album Style" textFill="WHITE">
-                     <font>
-                        <Font name="Ebrima" size="13.0" />
-                     </font>
-                  </Label>
-                  <JFXToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" toggleColor="#e89511" toggleLineColor="#ff9602" unToggleColor="WHITE" unToggleLineColor="WHITE">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
-                  </JFXToggleButton>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="54.0" layoutY="185.0">
-               <children>
-                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="100.0" text="Album Style" textFill="WHITE">
-                     <font>
-                        <Font name="Ebrima" size="13.0" />
-                     </font>
-                  </Label>
-                  <JFXToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" toggleColor="#e89511" toggleLineColor="#ff9602" unToggleColor="WHITE" unToggleLineColor="WHITE">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
-                  </JFXToggleButton>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="54.0" layoutY="275.0">
-               <children>
-                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="100.0" text="Lyrics Style" textFill="WHITE">
-                     <font>
-                        <Font name="Ebrima" size="13.0" />
-                     </font>
-                  </Label>
-                  <JFXToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" toggleColor="#e89511" toggleLineColor="#ff9602" unToggleColor="WHITE" unToggleLineColor="WHITE">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
-                  </JFXToggleButton>
-               </children>
-            </HBox>
-            <Label layoutX="14.0" layoutY="248.0" text="Toggle Control" textFill="WHITE">
-               <font>
-                  <Font name="Ebrima" size="18.0" />
-               </font>
-            </Label>
-            <Line endX="100.0" layoutX="150.0" layoutY="230.0" startX="-100.0" stroke="#e89511" />
          </children>
       </Pane>
    </children>

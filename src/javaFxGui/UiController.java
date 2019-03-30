@@ -1,14 +1,19 @@
 package javaFxGui;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import playerCore.Manager;
 
 public class UiController implements Initializable{
 
@@ -17,6 +22,14 @@ public class UiController implements Initializable{
     private static final int DEFAULT_STARTING_X_POSITION = 0;
     private static final int DEFAULT_ENDING_X_POSITION = -120;
     AnimationGenerator animationGenerator = null;
+    FileChooser fileChooser;
+    Manager manager;
+    
+    @FXML
+    private FontAwesomeIcon btn_play;
+
+    @FXML
+    private FontAwesomeIcon btn_pause;
     
 	@FXML
 	private HBox parent;
@@ -29,6 +42,8 @@ public class UiController implements Initializable{
 		makeStageDrageable();
 		sidebar.setVisible(false);
 		animationGenerator = new AnimationGenerator();
+		fileChooser = new FileChooser();
+		manager = Manager.getInstance();
 	}
 	
 	public void makeStageDrageable() {
@@ -67,6 +82,37 @@ public class UiController implements Initializable{
             });
     	}
     }
+	
+	@FXML
+	private void open_file(MouseEvent event) {
+		File selectedFile = fileChooser.showOpenDialog(null);
+		manager.addMediaFile(selectedFile.getAbsolutePath());
+	}
+	
+	@FXML
+	private void next_song(MouseEvent event) {
+		manager.next();
+	}
+	
+	@FXML
+	private void previous_song(MouseEvent event) {
+		manager.previous();
+	}
+	
+	@FXML
+	private void play_current_song(MouseEvent event) {
+		btn_play.setVisible(false);
+		btn_pause.setVisible(true);
+		manager.playPause();
+		
+	}
+	
+	@FXML
+	private void pause_current_song(MouseEvent event) {
+		btn_pause.setVisible(false);
+		btn_play.setVisible(true);
+		manager.playPause();
+	}
     
     @FXML
     private void close_app(MouseEvent event) {
