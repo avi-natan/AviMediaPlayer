@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -28,6 +29,9 @@ public class UiController implements Initializable{
     
     private FileChooser fileChooser;
     private Manager manager;
+    
+    @FXML
+    private FontAwesomeIcon btn_remove;
     
     @FXML
     private FontAwesomeIcon btn_play;
@@ -51,7 +55,9 @@ public class UiController implements Initializable{
     private Pane sidebar;
 	
 	@FXML
-    private ListView<String> listview;
+    private ListView<Label> listview;
+	
+	private Label selectedLabel;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -103,9 +109,29 @@ public class UiController implements Initializable{
 	private void open_file(MouseEvent event) {
 		File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
 		if(selectedFile != null) {
-			listview.getItems().add(selectedFile.getName());
+			Label lb = new Label();
+			lb.setText(selectedFile.getName());
+			lb.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		        @Override
+		        public void handle(MouseEvent event) {
+		            System.out.println("clicked on " + lb.getText());  // TODO: cleanup
+		            selectedLabel = lb;
+		            btn_remove.setDisable(false);
+		            btn_remove.setOpacity(1.0);
+		        }
+		    });
+			listview.getItems().add(lb);
 			manager.addMediaFile(selectedFile.getAbsolutePath());
 		}
+	}
+	
+	@FXML
+	private void remove_selected_file(MouseEvent event) {
+		int toBeDeletedIndex = listview.getItems().indexOf(selectedLabel);
+		System.out.println(toBeDeletedIndex);
+		manager.removeMediaFile(listview.getItems().indexOf(selectedLabel));
+		listview.getItems().remove(selectedLabel);
+		selectedLabel = listview.getItems().get(toBeDeletedIndex-1);
 	}
 	
 	@FXML
