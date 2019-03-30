@@ -31,6 +31,15 @@ public class UiController implements Initializable{
     @FXML
     private FontAwesomeIcon btn_pause;
     
+    @FXML
+    private FontAwesomeIcon btn_stop;
+    
+    @FXML
+    private FontAwesomeIcon btn_step_backward;
+    
+    @FXML
+    private FontAwesomeIcon btn_step_forward;
+    
 	@FXML
 	private HBox parent;
 	
@@ -104,7 +113,6 @@ public class UiController implements Initializable{
 		btn_play.setVisible(false);
 		btn_pause.setVisible(true);
 		manager.playPause();
-		
 	}
 	
 	@FXML
@@ -112,6 +120,13 @@ public class UiController implements Initializable{
 		btn_pause.setVisible(false);
 		btn_play.setVisible(true);
 		manager.playPause();
+	}
+	
+	@FXML
+	private void stop_current_song(MouseEvent event) {
+		btn_pause.setVisible(false);
+		btn_play.setVisible(true);
+		manager.stop();
 	}
     
     @FXML
