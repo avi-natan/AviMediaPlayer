@@ -1,0 +1,36 @@
+.parent{
+    -fx-background-color: transparent;
+}
+.player{
+    -fx-background-color: #32465A;
+    -fx-background-radius: 5px;
+}
+.orange{
+    -fx-background-color: #E89511;
+    -fx-background-radius: 5px 5px 0px 0px;
+}
+.close-btn{
+    -fx-fill:#fff;
+}
+.close-btn:hover{
+    -fx-fill:#ff3333;
+    -fx-cursor: hand;
+}
+.menu-btn{
+    -fx-fill: #fff;
+}
+.menu-btn:hover{
+    -fx-fill: #E89511;
+    -fx-cursor: hand;
+}
+
+.player-btns{
+    -fx-fill:#fff;
+}
+.player-btns:hover{
+    -fx-fill:#E89511;
+    -fx-cursor:hand;
+}
+.jfx-progress-bar{
+    -fx-accent :#E89511;
+}

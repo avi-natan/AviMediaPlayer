@@ -1,4 +1,4 @@
-package gui;
+package swingGui;
 
 import java.awt.EventQueue;
 

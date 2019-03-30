@@ -1,4 +1,4 @@
-package gui;
+package textBasedUi;
 
 import java.util.Scanner;
 
