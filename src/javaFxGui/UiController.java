@@ -9,10 +9,13 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import playerCore.Manager;
 
 public class UiController implements Initializable{
@@ -21,9 +24,10 @@ public class UiController implements Initializable{
     private double yOffset = 0;
     private static final int DEFAULT_STARTING_X_POSITION = 0;
     private static final int DEFAULT_ENDING_X_POSITION = -120;
-    AnimationGenerator animationGenerator = null;
-    FileChooser fileChooser;
-    Manager manager;
+    private AnimationGenerator animationGenerator = null;
+    
+    private FileChooser fileChooser;
+    private Manager manager;
     
     @FXML
     private FontAwesomeIcon btn_play;
@@ -45,6 +49,9 @@ public class UiController implements Initializable{
 	
 	@FXML
     private Pane sidebar;
+	
+	@FXML
+    private ListView<String> listview;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -94,8 +101,11 @@ public class UiController implements Initializable{
 	
 	@FXML
 	private void open_file(MouseEvent event) {
-		File selectedFile = fileChooser.showOpenDialog(null);
-		manager.addMediaFile(selectedFile.getAbsolutePath());
+		File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+		if(selectedFile != null) {
+			listview.getItems().add(selectedFile.getName());
+			manager.addMediaFile(selectedFile.getAbsolutePath());
+		}
 	}
 	
 	@FXML

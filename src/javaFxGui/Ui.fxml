@@ -47,6 +47,7 @@
                   <FontAwesomeIcon disable="true" iconName="MINUS" layoutX="31.0" layoutY="20.0" opacity="0.5" size="1.5em" styleClass="menu-btn" />
                </children>
             </Pane>
+            <ListView fx:id="listview" layoutX="14.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="272.0" styleClass="songlist" />
          </children>
       </Pane>
    </children>

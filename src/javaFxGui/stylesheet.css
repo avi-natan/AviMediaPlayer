@@ -9,6 +9,17 @@
     -fx-background-color: #E89511;
     -fx-background-radius: 5px 5px 0px 0px;
 }
+.songlist{
+    -fx-background-color: #F6CE8E;
+    -fx-background-radius: 0px 0px 5px 5px;
+}
+.songlist .list-cell:odd {
+    -fx-background-color: #F6CE8E;
+}
+
+.songlist .list-cell:even {
+    -fx-background-color: #F0AF46;
+}
 .close-btn{
     -fx-fill:#fff;
 }
