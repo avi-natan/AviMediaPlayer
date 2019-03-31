@@ -38,6 +38,14 @@ public class Manager {
 	
 	public void removeMediaFile(int index) {
 		System.out.println("Removing file " + playlist.get(index).getTitle());
+		if(currentMediaFile == playlist.get(index)) {
+			currentMediaFile.stop();
+			if(playlist.size() == 1) {
+				currentMediaFile = null;
+			} else {
+				currentMediaFile = index == playlist.size() - 1 ? playlist.get(index - 1) : playlist.get(index + 1);
+			}
+		}
 		playlist.remove(index);
 	}
 	

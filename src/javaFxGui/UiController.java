@@ -3,18 +3,24 @@ package javaFxGui;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import playerCore.Manager;
@@ -58,6 +64,8 @@ public class UiController implements Initializable{
     private ListView<Label> listview;
 	
 	private Label selectedLabel;
+	
+	private Label playingLabel;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -111,17 +119,31 @@ public class UiController implements Initializable{
 		if(selectedFile != null) {
 			Label lb = new Label();
 			lb.setText(selectedFile.getName());
+			lb.setMaxWidth(listview.getWidth()-15);
+			lb.setTextFill(Color.BLACK);
 			lb.setOnMouseClicked(new EventHandler<MouseEvent>() {
 		        @Override
 		        public void handle(MouseEvent event) {
 		            System.out.println("clicked on " + lb.getText());  // TODO: cleanup
+		            if(selectedLabel != null) {
+		            	selectedLabel.setStyle(listview.getItems().indexOf(selectedLabel) % 2 == 1 ? (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F6CE8E;" : "-fx-background-color: #F6CE8E;") : (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F0AF46;" : "-fx-background-color: #F0AF46;"));
+		            }
 		            selectedLabel = lb;
+		            selectedLabel.setStyle(selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-background-color: #93abc3;");
 		            btn_remove.setDisable(false);
 		            btn_remove.setOpacity(1.0);
 		        }
 		    });
 			listview.getItems().add(lb);
 			manager.addMediaFile(selectedFile.getAbsolutePath());
+			if(listview.getItems().size() == 1) {
+				playingLabel = lb;
+				playingLabel.setTextFill(Color.web("#4e6d8d"));
+				playingLabel.setStyle("-fx-font-weight: bold;");
+				btn_play.setVisible(false);
+				btn_pause.setVisible(true);
+				manager.playPause();
+			}
 		}
 	}
 	
@@ -129,19 +151,54 @@ public class UiController implements Initializable{
 	private void remove_selected_file(MouseEvent event) {
 		int toBeDeletedIndex = listview.getItems().indexOf(selectedLabel);
 		System.out.println(toBeDeletedIndex);
-		manager.removeMediaFile(listview.getItems().indexOf(selectedLabel));
+		
+		if(playingLabel == selectedLabel) {
+			if(listview.getItems().size() == 1) {
+				playingLabel = null;
+			} else {
+				playingLabel = toBeDeletedIndex == listview.getItems().size() - 1 ? listview.getItems().get(toBeDeletedIndex - 1) : listview.getItems().get(toBeDeletedIndex + 1);
+				playingLabel.setTextFill(Color.web("#4e6d8d"));
+				playingLabel.setStyle("-fx-font-weight: bold;");
+			}
+			btn_pause.setVisible(false);
+			btn_play.setVisible(true);
+		}
+		
+		manager.removeMediaFile(toBeDeletedIndex);
 		listview.getItems().remove(selectedLabel);
-		selectedLabel = listview.getItems().get(toBeDeletedIndex-1);
+		selectedLabel = null;
+		btn_remove.setDisable(true);
+        btn_remove.setOpacity(0.5);
 	}
 	
 	@FXML
 	private void next_song(MouseEvent event) {
+		int playingIndex = listview.getItems().indexOf(playingLabel);
+		playingLabel.setTextFill(Color.BLACK);
+		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: normal; -fx-background-color: #93abc3;" : "-fx-font-weight: normal;");
+		playingLabel = (playingIndex == listview.getItems().size() - 1) ? listview.getItems().get(0) : listview.getItems().get(playingIndex+1);
+		playingLabel.setTextFill(Color.web("#4e6d8d"));
+		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-font-weight: bold;");
+		btn_play.setVisible(false);
+		btn_pause.setVisible(true);
+		manager.stop();
 		manager.next();
+		manager.playPause();
 	}
 	
 	@FXML
 	private void previous_song(MouseEvent event) {
+		int playingIndex = listview.getItems().indexOf(playingLabel);
+		playingLabel.setTextFill(Color.BLACK);
+		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: normal; -fx-background-color: #93abc3;" : "-fx-font-weight: normal;");
+		playingLabel = (playingIndex == 0) ? listview.getItems().get(listview.getItems().size() - 1) : listview.getItems().get(playingIndex-1);
+		playingLabel.setTextFill(Color.web("#4e6d8d"));
+		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-font-weight: bold;");
+		btn_play.setVisible(false);
+		btn_pause.setVisible(true);
+		manager.stop();
 		manager.previous();
+		manager.playPause();
 	}
 	
 	@FXML
