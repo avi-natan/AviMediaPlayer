@@ -2,8 +2,11 @@ package mediaFiles;
 
 import java.io.File;
 
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+import playerCore.UiCallbackInterface;
 
 public class MP3File implements MediaFile{
 	
@@ -18,7 +21,7 @@ public class MP3File implements MediaFile{
 	private String album;
 	private int year;	
 	
-	public MP3File(String fileName) {
+	public MP3File(String fileName, UiCallbackInterface c) {
 		this.state = MediaFileState.STOPPED;
 		
 		this.fileName = fileName;
@@ -26,6 +29,30 @@ public class MP3File implements MediaFile{
 			File f = new File(fileName);
 			this.media = new Media(f.toURI().toURL().toExternalForm());
 			this.player = new MediaPlayer(media);
+			
+			player.setOnEndOfMedia(new Runnable() {
+		       public void run() {
+		    	   
+		    	   stop();
+		    	   c.getPauseButton().setVisible(false);
+		    	   c.getPlayButton().setVisible(true);
+		       }
+			});
+			
+			
+			Slider slider = c.getSlider();
+			// Synchronize the current time of the video and the time slider.
+			player.currentTimeProperty().addListener((o) -> {
+				System.out.println(player.getCurrentTime().toMillis());
+				slider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis() * 100);
+			});
+			
+			// Adjust the current time of the video after the time slider is clicked. 
+			slider.valueProperty().addListener((o) -> {
+				if(slider.isPressed())
+					player.seek(player.getMedia().getDuration().multiply(slider.getValue()/100));
+			});
+			
 		} catch (Exception e) {
 			System.out.println("Problem playing file " + fileName);
 			System.out.println(e);
@@ -64,6 +91,7 @@ public class MP3File implements MediaFile{
 		
 		if(player != null) {
 			player.stop();
+			player.seek(Duration.ZERO);
 		}
 		
 		state = MediaFileState.STOPPED;

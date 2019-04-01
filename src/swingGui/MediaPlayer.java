@@ -6,7 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.scene.control.Slider;
 import playerCore.Manager;
+import playerCore.UiCallbackInterface;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -74,7 +77,26 @@ public class MediaPlayer extends JFrame {
 				//System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 				
 				// create an mp3 file based on the file that the user selects
-				manager.addMediaFile(selectedFile.getAbsolutePath());
+				manager.addMediaFile(selectedFile.getAbsolutePath(), new UiCallbackInterface() {
+					
+					@Override
+					public Slider getSlider() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+					
+					@Override
+					public FontAwesomeIcon getPlayButton() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+					
+					@Override
+					public FontAwesomeIcon getPauseButton() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+				});
 				
 				if(!manager.isPlaylistEmpty()) {
 					btnPlayPause.setEnabled(true);

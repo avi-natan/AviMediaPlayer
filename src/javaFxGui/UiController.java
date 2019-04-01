@@ -14,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -24,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import playerCore.Manager;
+import playerCore.UiCallbackInterface;
 
 public class UiController implements Initializable{
 
@@ -37,7 +39,20 @@ public class UiController implements Initializable{
     private Manager manager;
     
     @FXML
+    private Pane sidebar;
+    
+    @FXML
+    private ListView<Label> listview;
+    
+    @FXML
     private FontAwesomeIcon btn_remove;
+    
+    
+    @FXML
+	private HBox parent;
+    
+    @FXML
+    private Slider slider;
     
     @FXML
     private FontAwesomeIcon btn_play;
@@ -54,14 +69,6 @@ public class UiController implements Initializable{
     @FXML
     private FontAwesomeIcon btn_step_forward;
     
-	@FXML
-	private HBox parent;
-	
-	@FXML
-    private Pane sidebar;
-	
-	@FXML
-    private ListView<Label> listview;
 	
 	private Label selectedLabel;
 	
@@ -135,7 +142,23 @@ public class UiController implements Initializable{
 		        }
 		    });
 			listview.getItems().add(lb);
-			manager.addMediaFile(selectedFile.getAbsolutePath());
+			manager.addMediaFile(selectedFile.getAbsolutePath(), new UiCallbackInterface() {
+				
+				@Override
+				public Slider getSlider() {
+					return slider;
+				}
+				
+				@Override
+				public FontAwesomeIcon getPlayButton() {
+					return btn_play;
+				}
+				
+				@Override
+				public FontAwesomeIcon getPauseButton() {
+					return btn_pause;
+				}
+			});
 			if(listview.getItems().size() == 1) {
 				playingLabel = lb;
 				playingLabel.setTextFill(Color.web("#4e6d8d"));

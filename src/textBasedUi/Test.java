@@ -2,7 +2,10 @@ package textBasedUi;
 
 import java.util.Scanner;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.scene.control.Slider;
 import playerCore.Manager;
+import playerCore.UiCallbackInterface;
 
 public class Test {
 
@@ -23,7 +26,26 @@ public class Test {
 				System.out.print("Enter filename: ");
 				s = new Scanner(System.in);
 				String filename = s.nextLine();
-				manager.addMediaFile(filename);
+				manager.addMediaFile(filename, new UiCallbackInterface() {
+					
+					@Override
+					public Slider getSlider() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+					
+					@Override
+					public FontAwesomeIcon getPlayButton() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+					
+					@Override
+					public FontAwesomeIcon getPauseButton() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+				});
 				break;
 			case 2:
 				manager.listMediaFiles();

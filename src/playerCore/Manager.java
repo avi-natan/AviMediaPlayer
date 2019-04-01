@@ -26,8 +26,8 @@ public class Manager {
 	}
 	
 	
-	public void addMediaFile(String filename) {
-		MediaFile file = new MP3File(filename);
+	public void addMediaFile(String filename, UiCallbackInterface c) {
+		MediaFile file = new MP3File(filename, c);
 		System.out.println("Adding file " + file.getTitle() + ", file path is " + file.getFileName() + "\n");
 		playlist.add(file);
 		
