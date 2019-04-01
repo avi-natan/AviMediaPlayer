@@ -28,12 +28,12 @@
                   <Font name="Ebrima" size="13.0" />
                </font>
             </Label>
-            <JFXProgressBar layoutX="2.0" layoutY="350.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="380.0" progress="0.65" />
             <FontAwesomeIcon fx:id="btn_step_backward" iconName="STEP_BACKWARD" layoutX="124.0" layoutY="416.0" onMouseClicked="#previous_song" size="3em" styleClass="player-btns" />
             <FontAwesomeIcon fx:id="btn_play" iconName="PLAY" layoutX="166.0" layoutY="415.0" onMouseClicked="#play_current_song" size="4em" styleClass="player-btns" />
             <FontAwesomeIcon fx:id="btn_step_forward" iconName="STEP_FORWARD" layoutX="225.0" layoutY="416.0" onMouseClicked="#next_song" size="3em" styleClass="player-btns" />
             <FontAwesomeIcon fx:id="btn_pause" iconName="PAUSE" layoutX="164.0" layoutY="415.0" onMouseClicked="#pause_current_song" size="4em" styleClass="player-btns" visible="false" />
             <FontAwesomeIcon fx:id="btn_stop" iconName="STOP" layoutX="76.0" layoutY="417.0" onMouseClicked="#stop_current_song" size="2em" styleClass="player-btns" />
+            <JFXSlider layoutY="343.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="380.0" />
          </children>
       </Pane>
       <Pane fx:id="sidebar" layoutX="220.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="300.0" styleClass="player" HBox.hgrow="NEVER">
