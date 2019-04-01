@@ -119,7 +119,7 @@ public class UiController implements Initializable{
 		if(selectedFile != null) {
 			Label lb = new Label();
 			lb.setText(selectedFile.getName());
-			lb.setMaxWidth(listview.getWidth()-15);
+			lb.setMaxWidth(listview.getWidth()-2);
 			lb.setTextFill(Color.BLACK);
 			lb.setOnMouseClicked(new EventHandler<MouseEvent>() {
 		        @Override

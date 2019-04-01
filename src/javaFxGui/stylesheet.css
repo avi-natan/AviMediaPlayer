@@ -15,10 +15,12 @@
 }
 .songlist .list-cell:odd {
     -fx-background-color: #F6CE8E;
+    -fx-padding: 0px;
 }
 
 .songlist .list-cell:even {
     -fx-background-color: #F0AF46;
+    -fx-padding: 0px;
 }
 .close-btn{
     -fx-fill:#fff;
