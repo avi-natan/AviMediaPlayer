@@ -1,30 +1,22 @@
 package javaFxGui;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import mediaFiles.MediaFile;
 import playerCore.Manager;
 import playerCore.UiCallbackInterface;
 
@@ -82,6 +74,28 @@ public class UiController implements Initializable{
 		animationGenerator = new AnimationGenerator();
 		fileChooser = new FileChooser();
 		manager = Manager.getInstance();
+		manager.setUiInterface(new UiCallbackInterface() {
+				
+				@Override
+				public Slider getSlider() {
+					return slider;
+				}
+				
+				@Override
+				public FontAwesomeIcon getPlayButton() {
+					return btn_play;
+				}
+				
+				@Override
+				public FontAwesomeIcon getPauseButton() {
+					return btn_pause;
+				}
+
+				@Override
+				public void advance() {
+					next_song(null);
+				}
+			});
 	}
 	
 	public void makeStageDrageable() {
@@ -143,41 +157,14 @@ public class UiController implements Initializable{
 		        }
 		    });
 			listview.getItems().add(lb);
-			manager.addMediaFile(selectedFile.getAbsolutePath(), new UiCallbackInterface() {
-				
-				@Override
-				public Slider getSlider() {
-					return slider;
-				}
-				
-				@Override
-				public FontAwesomeIcon getPlayButton() {
-					return btn_play;
-				}
-				
-				@Override
-				public FontAwesomeIcon getPauseButton() {
-					return btn_pause;
-				}
-
-				@Override
-				public void advance() {
-					next_song(event);
-					
-				}
-
-				@Override
-				public boolean isCurrentFile(MediaFile mf) {
-					return manager.isCurrent(mf);
-				}
-			});
+			manager.addMediaFile(selectedFile.getAbsolutePath());
 			if(listview.getItems().size() == 1) {
 				playingLabel = lb;
 				playingLabel.setTextFill(Color.web("#4e6d8d"));
 				playingLabel.setStyle("-fx-font-weight: bold;");
 				btn_play.setVisible(false);
 				btn_pause.setVisible(true);
-				manager.playPause();
+				manager.play();
 			}
 		}
 	}
@@ -218,7 +205,7 @@ public class UiController implements Initializable{
 		btn_pause.setVisible(true);
 		manager.stop();
 		manager.next();
-		manager.playPause();
+		manager.play();
 	}
 	
 	@FXML
@@ -233,21 +220,21 @@ public class UiController implements Initializable{
 		btn_pause.setVisible(true);
 		manager.stop();
 		manager.previous();
-		manager.playPause();
+		manager.play();
 	}
 	
 	@FXML
 	private void play_current_song(MouseEvent event) {
 		btn_play.setVisible(false);
 		btn_pause.setVisible(true);
-		manager.playPause();
+		manager.play();
 	}
 	
 	@FXML
 	private void pause_current_song(MouseEvent event) {
 		btn_pause.setVisible(false);
 		btn_play.setVisible(true);
-		manager.playPause();
+		manager.pause();
 	}
 	
 	@FXML

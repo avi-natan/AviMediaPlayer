@@ -78,38 +78,7 @@ public class MediaPlayer extends JFrame {
 				//System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 				
 				// create an mp3 file based on the file that the user selects
-				manager.addMediaFile(selectedFile.getAbsolutePath(), new UiCallbackInterface() {
-					
-					@Override
-					public Slider getSlider() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-					
-					@Override
-					public FontAwesomeIcon getPlayButton() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-					
-					@Override
-					public FontAwesomeIcon getPauseButton() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-
-					@Override
-					public void advance() {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					public boolean isCurrentFile(MediaFile mf) {
-						// TODO Auto-generated method stub
-						return false;
-					}
-				});
+				manager.addMediaFile(selectedFile.getAbsolutePath());
 				
 				if(!manager.isPlaylistEmpty()) {
 					btnPlayPause.setEnabled(true);
@@ -134,7 +103,7 @@ public class MediaPlayer extends JFrame {
 		btnPlayPause.setMargin(new Insets(2, 2, 2, 2));
 		btnPlayPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				manager.playPause();
+				manager.play();
 			}
 		});
 		btnPlayPause.setBounds(235, 254, 89, 23);

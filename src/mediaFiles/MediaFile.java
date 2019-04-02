@@ -2,12 +2,6 @@ package mediaFiles;
 
 public interface MediaFile {
 	
-	public void playPause();
-	public void stop();
-	
-	public MediaFileState getState();
-	public void setState(MediaFileState state);
-	
 	public String getFileName();
 	public void setFileName(String fileName);
 	
@@ -20,7 +14,7 @@ public interface MediaFile {
 	public String getAlbum();
 	public void setAlbum(String album);
 	
-	public int getYear();
-	public void setYear(int year);
+	public String getYear();
+	public void setYear(String year);
 
 }

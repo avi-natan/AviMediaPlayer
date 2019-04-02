@@ -27,48 +27,17 @@ public class Test {
 				System.out.print("Enter filename: ");
 				s = new Scanner(System.in);
 				String filename = s.nextLine();
-				manager.addMediaFile(filename, new UiCallbackInterface() {
-					
-					@Override
-					public Slider getSlider() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-					
-					@Override
-					public FontAwesomeIcon getPlayButton() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-					
-					@Override
-					public FontAwesomeIcon getPauseButton() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-
-					@Override
-					public void advance() {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					public boolean isCurrentFile(MediaFile mf) {
-						// TODO Auto-generated method stub
-						return false;
-					}
-				});
+				manager.addMediaFile(filename);
 				break;
 			case 2:
-				manager.listMediaFiles();
+				System.out.println("WAS DISPLAYING FILES LIST");
 				System.out.print("Select file to remove: ");
 				s = new Scanner(System.in);
 				int index = s.nextInt(); // TODO: input guard
 				manager.removeMediaFile(index);
 				break;
 			case 3:
-				manager.displayCurrentMediaFile();
+				System.out.println("WAS DISPLAYING CURRENT MEDIA FILE");
 				break;
 			case 4:
 				manager.previous();
