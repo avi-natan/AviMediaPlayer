@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.control.Slider;
+import mediaFiles.MediaFile;
 import playerCore.Manager;
 import playerCore.UiCallbackInterface;
 
@@ -95,6 +96,18 @@ public class MediaPlayer extends JFrame {
 					public FontAwesomeIcon getPauseButton() {
 						// TODO Auto-generated method stub
 						return null;
+					}
+
+					@Override
+					public void advance() {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public boolean isCurrentFile(MediaFile mf) {
+						// TODO Auto-generated method stub
+						return false;
 					}
 				});
 				

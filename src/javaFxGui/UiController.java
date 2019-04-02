@@ -24,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import mediaFiles.MediaFile;
 import playerCore.Manager;
 import playerCore.UiCallbackInterface;
 
@@ -157,6 +158,17 @@ public class UiController implements Initializable{
 				@Override
 				public FontAwesomeIcon getPauseButton() {
 					return btn_pause;
+				}
+
+				@Override
+				public void advance() {
+					next_song(event);
+					
+				}
+
+				@Override
+				public boolean isCurrentFile(MediaFile mf) {
+					return manager.isCurrent(mf);
 				}
 			});
 			if(listview.getItems().size() == 1) {

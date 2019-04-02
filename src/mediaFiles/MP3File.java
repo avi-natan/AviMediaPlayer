@@ -30,12 +30,11 @@ public class MP3File implements MediaFile{
 			this.media = new Media(f.toURI().toURL().toExternalForm());
 			this.player = new MediaPlayer(media);
 			
+			player.setVolume(0.1);
+			
 			player.setOnEndOfMedia(new Runnable() {
 		       public void run() {
-		    	   
-		    	   stop();
-		    	   c.getPauseButton().setVisible(false);
-		    	   c.getPlayButton().setVisible(true);
+		    	   c.advance();
 		       }
 			});
 			
@@ -49,8 +48,12 @@ public class MP3File implements MediaFile{
 			
 			// Adjust the current time of the video after the time slider is clicked. 
 			slider.valueProperty().addListener((o) -> {
-				if(slider.isPressed())
-					player.seek(player.getMedia().getDuration().multiply(slider.getValue()/100));
+				if(slider.isPressed()) {
+					if(c.isCurrentFile(this)) {
+						System.out.println("pressed!" + fileName);
+						player.seek(player.getMedia().getDuration().multiply(slider.getValue()/100));
+					}
+				}
 			});
 			
 		} catch (Exception e) {

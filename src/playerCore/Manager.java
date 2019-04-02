@@ -53,6 +53,10 @@ public class Manager {
 		return playlist.size() == 0;
 	}
 	
+	public boolean isCurrent(MediaFile mf) {
+		return mf == currentMediaFile;
+	}
+	
 	
 	public void playPause() {
 		if(currentMediaFile != null) {
