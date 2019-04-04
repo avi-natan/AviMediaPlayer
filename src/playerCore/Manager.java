@@ -114,8 +114,7 @@ public class Manager {
 			File f = new File(currentMediaFile.getFileName());
 			media = new Media(f.toURI().toURL().toExternalForm());
 			player = new MediaPlayer(media);
-			
-			player.setVolume(0.1);
+			player.setVolume(volumeSlider.getValue()/100);
 			
 			// Set end of media listener
 			player.setOnEndOfMedia(endOfMediaListener);
