@@ -20,6 +20,8 @@ public class Manager {
 	private Runnable endOfMediaListener;
 	private InvalidationListener currentTimeListener;
 	private InvalidationListener sliderValueListener;
+	private Slider volumeSlider;
+	private InvalidationListener volumeSliderliderValueListener;
 	
 	private List<MediaFile> playlist;
 	private MediaFile currentMediaFile;
@@ -45,23 +47,32 @@ public class Manager {
 	public void setUiInterface(UiCallbackInterface ui) {
 		this.ui = ui;
 		this.slider = ui.getSlider();
+		this.volumeSlider = ui.getVolumeSlider();
 		this.endOfMediaListener = new Runnable() {
 		       public void run() {
 		    	   ui.advance();
 		       }
 			};
 		this.currentTimeListener = (o) -> {
-			System.out.println(player.getCurrentTime().toMillis());
+//			System.out.println(player.getCurrentTime().toMillis());
 			slider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis() * 100);
 		};
 		this.sliderValueListener = (o) -> {
 			if(slider.isPressed()) {
-				System.out.println("pressed!" + currentMediaFile.getFileName());
+//				System.out.println("pressed!" + currentMediaFile.getFileName());
 				player.seek(player.getMedia().getDuration().multiply(slider.getValue()/100));
 			}
 		};
 		// Adjust the current time of the video after the time slider is clicked. 
-		slider.valueProperty().addListener(sliderValueListener);
+		this.slider.valueProperty().addListener(sliderValueListener);
+		
+		this.volumeSliderliderValueListener = (o) -> {
+			double v = volumeSlider.getValue()/100;
+			player.setVolume(v);
+			ui.updateVolume(v);
+		};
+		
+		this.volumeSlider.valueProperty().addListener(volumeSliderliderValueListener);
 	}
 	
 	

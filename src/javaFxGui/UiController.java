@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXSlider;
+
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -45,7 +46,7 @@ public class UiController implements Initializable{
 	private HBox parent;
     
     @FXML
-    private Slider slider;
+    private JFXSlider slider;
     
     @FXML
     private FontAwesomeIcon btn_play;
@@ -62,6 +63,14 @@ public class UiController implements Initializable{
     @FXML
     private FontAwesomeIcon btn_step_forward;
     
+    @FXML
+    private FontAwesomeIcon volume_icon;
+    
+    @FXML
+    private JFXSlider volume_slider;
+    
+    private double volumeBeforeMute;
+    
 	
 	private Label selectedLabel;
 	
@@ -77,7 +86,7 @@ public class UiController implements Initializable{
 		manager.setUiInterface(new UiCallbackInterface() {
 				
 				@Override
-				public Slider getSlider() {
+				public JFXSlider getSlider() {
 					return slider;
 				}
 				
@@ -94,6 +103,31 @@ public class UiController implements Initializable{
 				@Override
 				public void advance() {
 					next_song(null);
+				}
+
+				@Override
+				public FontAwesomeIcon getVolumeIcon() {
+					return volume_icon;
+				}
+
+				@Override
+				public JFXSlider getVolumeSlider() {
+					return volume_slider;
+				}
+
+				@Override
+				public void updateVolume(double volume) {
+					if(volume == 0.0) {
+						volume_icon.setIconName("VOLUME_OFF");
+						System.out.println(volume_icon.getIconName());
+					}else if(volume < 0.5) {
+						volume_icon.setIconName("VOLUME_DOWN");
+						System.out.println(volume_icon.getIconName());
+					} else {
+						volume_icon.setIconName("VOLUME_UP");
+						System.out.println(volume_icon.getIconName());
+					}
+					
 				}
 			});
 	}
@@ -242,6 +276,17 @@ public class UiController implements Initializable{
 		btn_pause.setVisible(false);
 		btn_play.setVisible(true);
 		manager.stop();
+	}
+	
+	@FXML
+	private void mute(MouseEvent event) {
+		double v = volume_slider.getValue();
+		if(v != 0.0) {
+			volumeBeforeMute = v; 
+			volume_slider.setValue(0.0);
+		} else {
+			volume_slider.setValue(volumeBeforeMute);
+		}
 	}
     
     @FXML

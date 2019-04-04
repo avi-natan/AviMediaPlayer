@@ -47,3 +47,21 @@
 .jfx-progress-bar{
     -fx-accent :#E89511;
 }
+
+
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+     -fx-background-color: #E89511;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+     -fx-background-color: #E89511;
+}
+
+/* Styling the slider value text inside animated thumb */
+.jfx-slider .slider-value {
+     -fx-fill: white;
+     -fx-stroke: white;
+}
