@@ -73,11 +73,13 @@ public class Manager {
 		
 		this.volumeSliderliderValueListener = (o) -> {
 			double v = volumeSlider.getValue()/100;
-			player.setVolume(v);
+			if(player != null) player.setVolume(v);
 			ui.updateVolume(v);
 		};
 		
 		this.volumeSlider.valueProperty().addListener(volumeSliderliderValueListener);
+		
+		ui.setForEmptyPlaylist();
 	}
 	
 	
@@ -87,6 +89,7 @@ public class Manager {
 		playlist.add(mf);
 		
 		if(playlist.size() == 1) {
+			ui.setForNonEmptyPlaylist();
 			currentMediaFile = playlist.get(0);
 			preparePlayer();
 			play();
@@ -98,6 +101,7 @@ public class Manager {
 		if(currentMediaFile == playlist.get(index)) {
 			cleanUpPlayer();
 			if(playlist.size() == 1) {
+				ui.setForEmptyPlaylist();
 				currentMediaFile = null;
 			} else {
 				currentMediaFile = index == playlist.size() - 1 ? playlist.get(index - 1) : playlist.get(index + 1);

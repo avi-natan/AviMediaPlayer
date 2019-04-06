@@ -15,6 +15,8 @@ public interface UiCallbackInterface {
 	public Slider getVolumeSlider();
 	public void updateVolume(double volume);
 	public void updatePlayingSong(int songIndex);
+	public void setForEmptyPlaylist();
+	public void setForNonEmptyPlaylist();
 	
 
 }

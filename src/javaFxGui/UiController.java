@@ -158,6 +158,36 @@ public class UiController implements Initializable{
 					btn_pause.setVisible(true);
 					
 				}
+
+				@Override
+				public void setForEmptyPlaylist() {
+					btn_play.setDisable(true);
+					btn_play.setOpacity(0.5);
+					btn_stop.setDisable(true);
+					btn_stop.setOpacity(0.5);
+					btn_step_forward.setDisable(true);
+					btn_step_forward.setOpacity(0.5);
+					btn_step_backward.setDisable(true);
+					btn_step_backward.setOpacity(0.5);
+					btn_pause.setDisable(true);
+					btn_pause.setOpacity(0.5);
+//					btn_pause.setVisible(false);
+				}
+				
+				@Override
+				public void setForNonEmptyPlaylist() {
+					btn_play.setDisable(false);
+					btn_play.setOpacity(1);
+					btn_stop.setDisable(false);
+					btn_stop.setOpacity(1);
+					btn_step_forward.setDisable(false);
+					btn_step_forward.setOpacity(1);
+					btn_step_backward.setDisable(false);
+					btn_step_backward.setOpacity(1);
+					btn_pause.setDisable(false);
+					btn_pause.setOpacity(1);
+//					btn_pause.setVisible(false);
+				}
 			});
 	}
 	
@@ -255,14 +285,12 @@ public class UiController implements Initializable{
 	
 	@FXML
 	private void next_song(MouseEvent event) {
-		manager.stop();
 		manager.next();
 		manager.play();
 	}
 	
 	@FXML
 	private void previous_song(MouseEvent event) {
-		manager.stop();
 		manager.previous();
 		manager.play();
 	}
