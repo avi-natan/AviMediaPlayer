@@ -10,6 +10,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -69,9 +70,20 @@ public class UiController implements Initializable{
     @FXML
     private JFXSlider volume_slider;
     
+    @FXML
+    private FontAwesomeIcon btn_repeat;
+    
+    @FXML
+    private FontAwesomeIcon btn_random;
+    
+    
+    
+    private boolean repeat;
+    
+    private boolean random;
+    
     private double volumeBeforeMute;
     
-	
 	private Label selectedLabel;
 	
 	private Label playingLabel;
@@ -82,6 +94,10 @@ public class UiController implements Initializable{
 		sidebar.setVisible(false);
 		animationGenerator = new AnimationGenerator();
 		fileChooser = new FileChooser();
+		repeat = false;
+		random = false;
+		change_button(btn_repeat, repeat);
+		change_button(btn_random, random);
 		manager = Manager.getInstance();
 		manager.setUiInterface(new UiCallbackInterface() {
 				
@@ -119,14 +135,27 @@ public class UiController implements Initializable{
 				public void updateVolume(double volume) {
 					if(volume == 0.0) {
 						volume_icon.setIconName("VOLUME_OFF");
-						System.out.println(volume_icon.getIconName());
 					}else if(volume < 0.5) {
 						volume_icon.setIconName("VOLUME_DOWN");
-						System.out.println(volume_icon.getIconName());
 					} else {
 						volume_icon.setIconName("VOLUME_UP");
-						System.out.println(volume_icon.getIconName());
 					}
+				}
+
+				@Override
+				public void stop() {
+					stop_current_song(null);
+				}
+
+				@Override
+				public void updatePlayingSong(int songIndex) {
+					playingLabel.setTextFill(Color.BLACK);
+					playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: normal; -fx-background-color: #93abc3;" : "-fx-font-weight: normal;");
+					playingLabel = listview.getItems().get(songIndex);
+					playingLabel.setTextFill(Color.web("#4e6d8d"));
+					playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-font-weight: bold;");
+					btn_play.setVisible(false);
+					btn_pause.setVisible(true);
 					
 				}
 			});
@@ -180,7 +209,6 @@ public class UiController implements Initializable{
 			lb.setOnMouseClicked(new EventHandler<MouseEvent>() {
 		        @Override
 		        public void handle(MouseEvent event) {
-		            System.out.println("clicked on " + lb.getText());  // TODO: cleanup
 		            if(selectedLabel != null) {
 		            	selectedLabel.setStyle(listview.getItems().indexOf(selectedLabel) % 2 == 1 ? (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F6CE8E;" : "-fx-background-color: #F6CE8E;") : (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F0AF46;" : "-fx-background-color: #F0AF46;"));
 		            }
@@ -198,7 +226,6 @@ public class UiController implements Initializable{
 				playingLabel.setStyle("-fx-font-weight: bold;");
 				btn_play.setVisible(false);
 				btn_pause.setVisible(true);
-				manager.play();
 			}
 		}
 	}
@@ -206,7 +233,6 @@ public class UiController implements Initializable{
 	@FXML
 	private void remove_selected_file(MouseEvent event) {
 		int toBeDeletedIndex = listview.getItems().indexOf(selectedLabel);
-		System.out.println(toBeDeletedIndex);
 		
 		if(playingLabel == selectedLabel) {
 			if(listview.getItems().size() == 1) {
@@ -229,14 +255,6 @@ public class UiController implements Initializable{
 	
 	@FXML
 	private void next_song(MouseEvent event) {
-		int playingIndex = listview.getItems().indexOf(playingLabel);
-		playingLabel.setTextFill(Color.BLACK);
-		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: normal; -fx-background-color: #93abc3;" : "-fx-font-weight: normal;");
-		playingLabel = (playingIndex == listview.getItems().size() - 1) ? listview.getItems().get(0) : listview.getItems().get(playingIndex+1);
-		playingLabel.setTextFill(Color.web("#4e6d8d"));
-		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-font-weight: bold;");
-		btn_play.setVisible(false);
-		btn_pause.setVisible(true);
 		manager.stop();
 		manager.next();
 		manager.play();
@@ -244,14 +262,6 @@ public class UiController implements Initializable{
 	
 	@FXML
 	private void previous_song(MouseEvent event) {
-		int playingIndex = listview.getItems().indexOf(playingLabel);
-		playingLabel.setTextFill(Color.BLACK);
-		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: normal; -fx-background-color: #93abc3;" : "-fx-font-weight: normal;");
-		playingLabel = (playingIndex == 0) ? listview.getItems().get(listview.getItems().size() - 1) : listview.getItems().get(playingIndex-1);
-		playingLabel.setTextFill(Color.web("#4e6d8d"));
-		playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-font-weight: bold;");
-		btn_play.setVisible(false);
-		btn_pause.setVisible(true);
 		manager.stop();
 		manager.previous();
 		manager.play();
@@ -287,6 +297,52 @@ public class UiController implements Initializable{
 		} else {
 			volume_slider.setValue(volumeBeforeMute);
 		}
+	}
+	
+	@FXML
+    private void repeat(MouseEvent event) {
+    	repeat = !repeat;
+    	change_button(btn_repeat, repeat);
+    	manager.setRepeat(repeat);
+    }
+	
+	@FXML
+    private void random(MouseEvent event) {
+		random = !random;
+		change_button(btn_random, random);
+    	manager.setRandom(random);
+    }
+	
+	private void change_button(FontAwesomeIcon btn, boolean val) {
+		if(val) {
+			btn.setFill(Color.web("#E89511"));
+			btn.setOnMouseEntered(new EventHandler<MouseEvent>() {
+    		      @Override public void handle(MouseEvent mouseEvent) {
+    		    	  btn.setFill(Color.web("#FFF"));
+    		    	  btn.setCursor(Cursor.HAND);
+    		      }
+    		    });
+			btn.setOnMouseExited(new EventHandler<MouseEvent>() {
+    		      @Override public void handle(MouseEvent mouseEvent) {
+    		    	  btn.setFill(Color.web("#E89511"));
+    		    	  btn.setCursor(Cursor.HAND);
+    		      }
+    		    });
+    	} else {
+    		btn.setFill(Color.web("#fff"));
+    		btn.setOnMouseEntered(new EventHandler<MouseEvent>() {
+    		      @Override public void handle(MouseEvent mouseEvent) {
+    		    	  btn.setFill(Color.web("#E89511"));
+    		    	  btn.setCursor(Cursor.HAND);
+    		      }
+    		    });
+    		btn.setOnMouseExited(new EventHandler<MouseEvent>() {
+    		      @Override public void handle(MouseEvent mouseEvent) {
+    		    	  btn.setFill(Color.web("#FFF"));
+    		    	  btn.setCursor(Cursor.HAND);
+    		      }
+    		    });
+    	}
 	}
     
     @FXML

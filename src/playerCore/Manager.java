@@ -2,7 +2,6 @@ package playerCore;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import javafx.beans.InvalidationListener;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import mediaFiles.MediaFile;
 import mediaFiles.MP3File;
 
@@ -28,6 +28,9 @@ public class Manager {
 	
 	private Media media;
 	private MediaPlayer player;
+	
+	private boolean repeat;
+	private boolean random;
 	
 	
 	private static class Loader {
@@ -49,17 +52,19 @@ public class Manager {
 		this.slider = ui.getSlider();
 		this.volumeSlider = ui.getVolumeSlider();
 		this.endOfMediaListener = new Runnable() {
-		       public void run() {
-		    	   ui.advance();
-		       }
-			};
+	       public void run() {
+	    	   if(repeat) {
+	    		   ui.advance();
+	    	   } else {
+	    		   ui.stop();
+	    	   }
+	       }
+		};
 		this.currentTimeListener = (o) -> {
-//			System.out.println(player.getCurrentTime().toMillis());
 			slider.setValue(player.getCurrentTime().toMillis() / player.getTotalDuration().toMillis() * 100);
 		};
 		this.sliderValueListener = (o) -> {
 			if(slider.isPressed()) {
-//				System.out.println("pressed!" + currentMediaFile.getFileName());
 				player.seek(player.getMedia().getDuration().multiply(slider.getValue()/100));
 			}
 		};
@@ -148,25 +153,47 @@ public class Manager {
 	public void stop() {
 		System.out.println("media stop");
 		player.stop();
+		player.seek(Duration.ZERO);
 	}
 	
 	
 	public void next() {
-		System.out.println("Changing to next song...");
 		cleanUpPlayer();
 		int i = playlist.indexOf(currentMediaFile);
-		currentMediaFile = i < playlist.size() - 1 ? playlist.get(i + 1) : playlist.get(0);
+		int nextI = 0;
+		if(!random) {
+			nextI = i < playlist.size() - 1 ? i + 1 : 0;
+		} else {
+			nextI = (int) (Math.random() * playlist.size() - 1);
+		}
+		currentMediaFile = playlist.get(nextI);
+		ui.updatePlayingSong(nextI);
 		preparePlayer();
 		System.out.println("New file is " + currentMediaFile.getTitle());
 	}
 	
 	public void previous() {
-		System.out.println("Changing to previous song...");
 		cleanUpPlayer();
 		int i = playlist.indexOf(currentMediaFile);
-		currentMediaFile = i > 0 ? playlist.get(i - 1) : playlist.get(playlist.size() - 1);
+		int prevI = 0;
+		if(!random) {
+			prevI = i > 0 ? i - 1 : playlist.size() - 1;
+		} else {
+			prevI = (int) (Math.random() * playlist.size() - 1);
+		}
+		currentMediaFile = playlist.get(prevI);
+		ui.updatePlayingSong(prevI);
 		preparePlayer();
 		System.out.println("New file is " + currentMediaFile.getTitle());
+	}
+
+	
+	public void setRepeat(boolean repeat) {
+		this.repeat = repeat;
+	}
+	
+	public void setRandom(boolean random) {
+		this.random = random;
 	}
 	
 	
