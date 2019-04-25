@@ -38,6 +38,7 @@
             <JFXSlider fx:id="volume_slider" layoutX="302.0" layoutY="401.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="14.0" prefWidth="72.0" />
             <FontAwesomeIcon fx:id="btn_repeat" fill="WHITE" iconName="REPEAT" layoutX="44.0" layoutY="417.0" onMouseClicked="#repeat" size="2em" />
             <FontAwesomeIcon fx:id="btn_random" fill="WHITE" iconName="RANDOM" layoutX="10.0" layoutY="418.0" onMouseClicked="#random" size="2em" />
+            <FontAwesomeIcon iconName="COMPRESS" layoutX="334.0" layoutY="20.0" onMouseClicked="#minimize_app" size="1.5em" styleClass="close-btn" />
          </children>
       </Pane>
       <Pane fx:id="sidebar" layoutX="220.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="300.0" styleClass="player" HBox.hgrow="NEVER">

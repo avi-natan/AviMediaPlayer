@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import playerCore.Manager;
 import playerCore.UiCallbackInterface;
@@ -376,6 +377,11 @@ public class UiController implements Initializable{
     @FXML
     private void close_app(MouseEvent event) {
     	System.exit(0);
+    }
+    
+    @FXML
+    private void minimize_app(MouseEvent event) {
+    	((Stage) ((Node) event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
 }
