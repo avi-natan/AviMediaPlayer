@@ -77,6 +77,9 @@ public class UiController implements Initializable{
     @FXML
     private FontAwesomeIcon btn_random;
     
+    @FXML
+    private Label curr_song_title;
+    
     
     
     private boolean repeat;
@@ -157,7 +160,8 @@ public class UiController implements Initializable{
 					playingLabel.setStyle(playingLabel == selectedLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-font-weight: bold;");
 					btn_play.setVisible(false);
 					btn_pause.setVisible(true);
-					
+					System.out.println("UPDATING " + playingLabel.getText());
+					curr_song_title.setText(playingLabel.getText());
 				}
 
 				@Override
@@ -250,7 +254,6 @@ public class UiController implements Initializable{
 		        }
 		    });
 			listview.getItems().add(lb);
-			manager.addMediaFile(selectedFile.getAbsolutePath());
 			if(listview.getItems().size() == 1) {
 				playingLabel = lb;
 				playingLabel.setTextFill(Color.web("#4e6d8d"));
@@ -258,6 +261,7 @@ public class UiController implements Initializable{
 				btn_play.setVisible(false);
 				btn_pause.setVisible(true);
 			}
+			manager.addMediaFile(selectedFile.getAbsolutePath());
 		}
 	}
 	

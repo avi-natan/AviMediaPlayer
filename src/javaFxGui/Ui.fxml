@@ -23,7 +23,7 @@
             </ImageView>
             <FontAwesomeIcon iconName="BARS" layoutX="8.0" layoutY="20.0" onMouseClicked="#open_or_close_sidebar" size="1.5em" styleClass="menu-btn" />
             <FontAwesomeIcon iconName="CLOSE" layoutX="357.0" layoutY="19.0" onMouseClicked="#close_app" size="1.5em" styleClass="close-btn" />
-            <Label layoutX="90.0" layoutY="306.0" text="Now Playing: Love Me Like You Do" textFill="WHITE">
+            <Label fx:id="curr_song_title" alignment="CENTER" layoutX="31.0" layoutY="306.0" prefHeight="19.0" prefWidth="321.0" text="Now Playing: Love Me Like You Do" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Ebrima" size="13.0" />
                </font>

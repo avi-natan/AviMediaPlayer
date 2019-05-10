@@ -13,7 +13,8 @@ public class MP3File implements MediaFile{
 		
 		this.fileName = fileName;
 		
-		this.title = "Undefined"; // TODO fix when we have a parser
+		String[] parts = fileName.split("\\\\");
+		this.title = parts[parts.length - 1];
 		this.artist = "Undefined";
 		this.album = "Undefined";
 		this.year = "1991";

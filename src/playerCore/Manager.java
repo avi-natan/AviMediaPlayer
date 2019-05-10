@@ -91,6 +91,7 @@ public class Manager {
 		if(playlist.size() == 1) {
 			ui.setForNonEmptyPlaylist();
 			currentMediaFile = playlist.get(0);
+			ui.updatePlayingSong(0);
 			preparePlayer();
 			play();
 		}
