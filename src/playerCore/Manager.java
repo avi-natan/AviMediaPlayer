@@ -191,6 +191,14 @@ public class Manager {
 		preparePlayer();
 		System.out.println("New file is " + currentMediaFile.getTitle());
 	}
+	
+	public void ithSong(int index) {
+		cleanUpPlayer();
+		currentMediaFile = playlist.get(index);
+		ui.updatePlayingSong(index);
+		preparePlayer();
+		System.out.println("New file is " + currentMediaFile.getTitle());
+	}
 
 	
 	public void setRepeat(boolean repeat) {

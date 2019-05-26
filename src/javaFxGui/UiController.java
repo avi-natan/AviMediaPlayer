@@ -3,10 +3,13 @@ package javaFxGui;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.jfoenix.controls.JFXSlider;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +17,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -91,6 +95,11 @@ public class UiController implements Initializable{
 	private Label selectedLabel;
 	
 	private Label playingLabel;
+	
+	private int eventCnt;
+	
+	Timer timer = new Timer("doubleClickTimer", false);
+
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -244,13 +253,59 @@ public class UiController implements Initializable{
 			lb.setOnMouseClicked(new EventHandler<MouseEvent>() {
 		        @Override
 		        public void handle(MouseEvent event) {
-		            if(selectedLabel != null) {
-		            	selectedLabel.setStyle(listview.getItems().indexOf(selectedLabel) % 2 == 1 ? (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F6CE8E;" : "-fx-background-color: #F6CE8E;") : (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F0AF46;" : "-fx-background-color: #F0AF46;"));
+		        	
+		        	eventCnt = event.getClickCount();
+		            if ( event.getClickCount() == 1 ) {
+		                timer.schedule(new TimerTask() {
+		                	
+		                	@Override
+		                    public void run() {
+		                    	if(selectedLabel != null) {
+					            	selectedLabel.setStyle(listview.getItems().indexOf(selectedLabel) % 2 == 1 ? (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F6CE8E;" : "-fx-background-color: #F6CE8E;") : (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F0AF46;" : "-fx-background-color: #F0AF46;"));
+					            }
+					            selectedLabel = lb;
+					            selectedLabel.setStyle(selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-background-color: #93abc3;");
+					            btn_remove.setDisable(false);
+					            btn_remove.setOpacity(1.0);
+		                        if ( eventCnt == 1 ) {
+		                            System.out.println( "You did a single click.");
+		                            
+		                        } else if ( eventCnt == 2 ) {
+		                            System.out.println("you clicked doule click.");
+		                            int selectedIndex = listview.getItems().indexOf(selectedLabel);
+		                            System.out.println("Song number in playlis it: " + selectedIndex);
+		                            Platform.runLater(new Runnable() {
+		                                @Override
+		                                public void run() {
+		                                	manager.ithSong(selectedIndex);
+		                                	manager.play();
+		                                }
+		                            });
+		                        }
+		                        eventCnt = 0;
+		                    }
+		                }, 200);
 		            }
-		            selectedLabel = lb;
-		            selectedLabel.setStyle(selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-background-color: #93abc3;");
-		            btn_remove.setDisable(false);
-		            btn_remove.setOpacity(1.0);
+		        	
+		        	
+		        	// =============
+//		        	if(event.getButton().equals(MouseButton.PRIMARY)){
+//		        		if(event.getClickCount() == 2 && !event.isConsumed()){
+//		        			event.consume();
+//		                    System.out.println("Double clicked");
+//		                } else if(event.getClickCount() == 1){
+//		                    System.out.println("Single clicked");
+//		                    if(selectedLabel != null) {
+//				            	selectedLabel.setStyle(listview.getItems().indexOf(selectedLabel) % 2 == 1 ? (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F6CE8E;" : "-fx-background-color: #F6CE8E;") : (selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #F0AF46;" : "-fx-background-color: #F0AF46;"));
+//				            }
+//				            selectedLabel = lb;
+//				            selectedLabel.setStyle(selectedLabel == playingLabel ? "-fx-font-weight: bold; -fx-background-color: #93abc3;" : "-fx-background-color: #93abc3;");
+//				            btn_remove.setDisable(false);
+//				            btn_remove.setOpacity(1.0);
+//		                }
+//		            }
+		        	// ============
+		            
 		        }
 		    });
 			listview.getItems().add(lb);
